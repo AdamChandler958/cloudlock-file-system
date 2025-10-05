@@ -21,5 +21,6 @@ COPY . .
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH="/app/.venv/lib/python3.13/site-packages:$PYTHONPATH"
 
+EXPOSE 3000
 
 CMD ["python", "main.py"]

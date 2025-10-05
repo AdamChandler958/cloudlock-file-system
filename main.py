@@ -1,6 +1,8 @@
 from minio import Minio
 from dotenv import load_dotenv
 import os
+import uvicorn
+from fastapi import FastAPI
 
 load_dotenv("dev.env")
 
@@ -16,5 +18,13 @@ client = Minio(
     secure=False,
 )
 
-bucket_list = client.list_buckets()
-print(bucket_list)
+app = FastAPI()
+
+
+@app.get("/")
+def ready_status():
+    return {"message": "MinIO Interaction Service is running"}
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=3000, reload=True)

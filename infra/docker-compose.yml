@@ -17,6 +17,8 @@ services:
       context: ../
       dockerfile: infra/Dockerfile
     image: minio-api:latest
+    ports:
+      - "3000:3000"
 
 volumes:
   minio_data:
