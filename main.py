@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import uvicorn
 from fastapi import FastAPI
-from app.src.endpoints import files
+from app.src.endpoints import files, buckets
 
 load_dotenv("dev.env")
 
@@ -21,7 +21,8 @@ client = Minio(
 
 app = FastAPI()
 
-app.include_router(files.router)
+# app.include_router(files.router)
+app.include_router(buckets.router)
 
 
 @app.get("/")
