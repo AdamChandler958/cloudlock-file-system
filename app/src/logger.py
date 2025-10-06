@@ -9,4 +9,4 @@ def setup_logger():
         handlers=[logging.StreamHandler()],
     )
 
-    return logging.getLogger("minio-redis-api-service")
+    return logging.getLogger("minio-api-service")
