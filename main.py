@@ -18,5 +18,5 @@ def ready_status():
 
 
 if __name__ == "__main__":
-    logger.info("Starting minio-redis-api-service...")
+    logger.info("Starting minio-api-service...")
     uvicorn.run("main:app", host="0.0.0.0", port=3000, reload=True, log_config=None)

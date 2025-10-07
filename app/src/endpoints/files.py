@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, UploadFile, HTTPException
 from app.src.minio_client import get_client
 from typing import Annotated
 import os
+from dotenv import load_dotenv
+import requests
 
 from app.src.logger import setup_logger
 
@@ -10,6 +12,9 @@ from minio import Minio
 router = APIRouter(prefix="/files", tags=["files", "storage"])
 
 logger = setup_logger()
+load_dotenv("dev.env")
+
+REDIS_API_URL = os.getenv("REDIS_API_URL")
 
 
 @router.post("/upload/{bucket_name}")
@@ -23,6 +28,21 @@ def single_file_upload(
     file_object.seek(0, os.SEEK_END)
     file_size = file_object.tell()
     file_object.seek(0)
+
+    logger.info(f"Requesting to post metadata for {object_name}")
+
+    response = requests.post(
+        f"{REDIS_API_URL}/metadata/{object_name}",
+        json={
+            "bucket_name": bucket_name,
+            "file_size": file_size,
+            "file_type": str(file.content_type),
+            "tags": None,
+        },
+    )
+
+    if response.status_code == 200:
+        logger.info("Metadata request complete")
 
     try:
         result = client.put_object(
